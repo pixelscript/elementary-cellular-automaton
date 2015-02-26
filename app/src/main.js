@@ -6,7 +6,7 @@ $(function(){
 		this.$parent = $(options.canvas).parent();
 		this.canvas = options.canvas;
 		this.context = this.canvas.getContext('2d');
-		this.pixelSize = 1;
+		this.pixelSize = 2;
 		this.pixels = {};
 		this.blockers = {};
 		this.blockerCoords = [];
