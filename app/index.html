@@ -73,8 +73,10 @@
         }(to));
 
         var sX,sY,eX,eY;
+        var down = false;
 
         $('body').on('mousedown touchstart',function(e) {
+            down = true;
             getPages(e);
             sX = eX = e.pageX;
             sY = eY = e.pageY;
@@ -91,6 +93,10 @@
         });
 
         $('body').on('mouseup touchend',function(e) {
+            if(!down){
+                return;
+            }
+            down = false;
             var pixelSize = $('input:radio[name=pixelSize]:checked').val();
             var type = $('input:radio[name=type]:checked').val();
             var interaction = $('input:radio[name=interaction]:checked').val();
