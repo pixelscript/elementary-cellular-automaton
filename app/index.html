@@ -9,14 +9,15 @@
     <link href='css/main.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
+    <button type="button" class="butt show" style="display:none;opacity:0.7;">show</button>
     <div class="controls">
         <h1 class="title">Elementary Cellular Automaton</h1>
         <h2 class="title">Click or drag on Canvas</h2>
-        <button type="button" class="butt clear">clear</button>
-        <button type="button" class="butt size one">1</button>
-        <button type="button" class="butt size two">2</button>
-        <button type="button" class="butt size five">5</button>
-        <button type="button" class="butt size ten">10</button><br/>
+        <span>pixel size:</span>
+        <label for="one">1</label><input type="radio" name="pixelSize"  value="1" id="one" checked="true"/>
+        <label for="two">2</label><input type="radio" name="pixelSize"  value="2" id="two" />
+        <label for="five">5</label><input type="radio" name="pixelSize" value="5" id="five"/>
+        <label for="ten">10</label><input type="radio" name="pixelSize" value="10" id="ten" /><br/>
 
         <label for="cell">cellula</label>
         <input type="radio" id="cell" name="interaction" checked="true" value="cellula"/>
@@ -34,7 +35,9 @@
         <input type="checkbox" id="overwrite" name="overwrite" checked="true" value="overwrite"/>
         <label for="toggleBlocker">show blockers</label>
         <input type="checkbox" id="toggleBlocker" name="toggleBlocker" checked="true" value="toggleBlocker"/><br/>
-        <button type="button" class="butt size fill">fill screen</button><br/>
+        <button type="button" class="butt size fill">fill screen</button>
+        <button type="button" class="butt hide">hide</button>
+        <button type="button" class="butt clear">clear</button>
     </div>
 
     <div class="content">
@@ -49,6 +52,17 @@
         cell = new ps.Cellula({'canvas':canvas}),
         to;
 
+        function getPages(e){
+            if(e.pageX === undefined) {
+                try{
+                    e.pageX = e.originalEvent.touches[0].pageX;
+                    e.pageY = e.originalEvent.touches[0].pageY;
+                } catch (e){
+
+                }
+            }
+        }
+
         $(window).on('resize',function(timeout) {
             return function(){
                 clearTimeout(timeout);
@@ -58,39 +72,58 @@
             }
         }(to));
 
-        var posX,
-        posY;
+        var sX,sY,eX,eY;
+
         $('body').on('mousedown touchstart',function(e) {
-            posX = e.pageX;
-            posY = e.pageY;
+            getPages(e);
+            sX = eX = e.pageX;
+            sY = eY = e.pageY;
             e.stopPropagation();
+            e.preventDefault();
+        });
+
+        $('body').on('mousemove touchmove',function(e) {
+            getPages(e);
+            eX = e.pageX;
+            eY = e.pageY;
+            e.stopPropagation();
+            e.preventDefault();
         });
 
         $('body').on('mouseup touchend',function(e) {
+            var pixelSize = $('input:radio[name=pixelSize]:checked').val();
             var type = $('input:radio[name=type]:checked').val();
             var interaction = $('input:radio[name=interaction]:checked').val();
+            cell.pixelSize = parseInt(pixelSize);
             cell.overwrite = $('#overwrite').is(':checked');
             if(interaction=='cellula') {
-                var left = Math.min(posX,e.pageX);
-                var right = Math.max(posX,e.pageX);
-                cell.generateAutomina(left,right,e.pageY,type); 
+                var left = Math.min(sX,eX);
+                var right = Math.max(sX,eX);
+                cell.generateAutomina(left,right,eY,type); 
             } else {
-                cell.drawBlocker(e.pageX-10,e.pageY-10,20,20);
+                cell.drawBlocker(eX-10,eY-10,20,20);
             }
             e.stopPropagation();
+            e.preventDefault();
         });
 
         $('.fill').on('mousedown touchstart',function(e) {
+            getPages(e);
+            var pixelSize = $('input:radio[name=pixelSize]:checked').val();
             var type = $('input:radio[name=type]:checked').val();
-            cell.overwrite = $('#overwrite').is(':checked');
             var right = $('body').width();
+
+            cell.pixelSize = parseInt(pixelSize);
+            cell.overwrite = $('#overwrite').is(':checked');
             cell.generateAutomina(0,right,0,type);
             e.stopPropagation();
+            e.preventDefault();
         });
 
         $('.ten').on('mousedown touchstart',function(e) {
             cell.pixelSize = 10;
             e.stopPropagation();
+            e.preventDefault();
         });
 
         $('.controls').on('mousedown touchstart mouseup touchend',function(e) {
@@ -100,26 +133,23 @@
         $('.clear').on('mousedown touchstart',function(e) {
             cell.clear();
             e.stopPropagation();
+            e.preventDefault();
         });
 
-        $('.one').on('mousedown touchstart',function(e) {
-            cell.pixelSize = 1;
+        $('.hide').on('mousedown touchstart',function(e) {
+            $('.controls').hide();
+            $('.show').show();
+            $('.github').hide();
             e.stopPropagation();
+            e.preventDefault();
         });
 
-        $('.two').on('mousedown touchstart',function(e) {
-            cell.pixelSize = 2;
+        $('.show').on('mousedown touchstart',function(e) {
+            $('.controls').show();
+            $('.show').hide();
+            $('.github').show();
             e.stopPropagation();
-        });
-
-        $('.five').on('mousedown touchstart',function(e) {
-            cell.pixelSize = 5;
-            e.stopPropagation();
-        });
-
-        $('.ten').on('mousedown touchstart',function(e) {
-            cell.pixelSize = 10;
-            e.stopPropagation();
+            e.preventDefault();
         });
 
         $('#toggleBlocker').on('change',function(e) {
@@ -128,6 +158,6 @@
         });
     });
 </script>
-<a href="https://github.com/pixelscript/elementary-cellular-automaton.git"><img style="position: absolute; top: 0; right: 0; border: 0; width:100px" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+<a class="github" href="https://github.com/pixelscript/elementary-cellular-automaton.git"><img style="position: absolute; top: 0; right: 0; border: 0; width:100px" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
 </body>
 </html>

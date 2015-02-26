@@ -49,6 +49,12 @@ h2.title{
 	background-color:rgba(255,255,255,0.8);
 }
 
+.show{
+	z-index:2;
+	position:relative;
+	margin:5px;
+}
+
 .shadow {
 	-webkit-box-shadow: 0px 4px 18px -1px rgba(0,0,0,0.72);
 	   -moz-box-shadow: 0px 4px 18px -1px rgba(0,0,0,0.72);
@@ -63,13 +69,19 @@ h2.title{
 .center{
 	text-align:center;
 }
-.clear {
+.clearer {
 	clear:both;
 }
 
 button {
+	text-align:center;
 	cursor:pointer;
 	background:white;
 	border:1px solid grey;
+	margin-top:10px;
+}
+
+.clear, .hide {
+	margin-left:10px;
 }
 
