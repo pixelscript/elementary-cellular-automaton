@@ -18,20 +18,20 @@ $(function(){
 		var blockers = this.blockers;
 		this.drawBlock(x,y,20,20,this.getBlockCol(this.showBlockers));
 		this.blockerCoords.push({x:x,y:y});
-        for(var t=y; t<y+h; t++){
-        	if(!blockers[t]){
-        		blockers[t] = [];
-        	}
-	        for(var i=x; i<x+w; i++){
-	        	blockers[t][i] = true;
-	        }
-    	}
+		for(var t=y; t<y+h; t++){
+			if(!blockers[t]){
+				blockers[t] = [];
+			}
+			for(var i=x; i<x+w; i++){
+				blockers[t][i] = true;
+			}
+		}
 	}
 
 	Cellula.prototype.drawBlock = function(x,y,w,h,col){
 		var ctx = this.context;
 		ctx.fillStyle = col;
-        ctx.fillRect (x, y, w, h);
+		ctx.fillRect (x, y, w, h);
 	}
 
 	Cellula.prototype.setSize = function(){
@@ -114,9 +114,9 @@ $(function(){
 	Cellula.prototype.generateAutomina = function(leftBound,rightBound,startY,type) {
 		var rules = this[type];
 		var self = this,
-			pixelSize = this.pixelSize,
-			pixels = this.pixels,
-			blockers = this.blockers;
+		pixelSize = this.pixelSize,
+		pixels = this.pixels,
+		blockers = this.blockers;
 
 		startY -= startY%pixelSize;
 
@@ -184,7 +184,7 @@ $(function(){
 	Cellula.prototype.drawPixel = function(x,y,col) {
 		var ctx = this.context;
 		ctx.fillStyle = col;
-        ctx.fillRect (x, y, this.pixelSize, this.pixelSize);
+		ctx.fillRect (x, y, this.pixelSize, this.pixelSize);
 	}
 
 	Cellula.prototype.clear = function() {
@@ -193,7 +193,7 @@ $(function(){
 		this.blockerCoords = [];
 		var ctx = this.context;
 		ctx.fillStyle = "rgb(255,255,255)";
-        ctx.fillRect (0, 0, this.width, this.height);
+		ctx.fillRect (0, 0, this.width, this.height);
 	}
 
 	ps.Cellula = Cellula;
