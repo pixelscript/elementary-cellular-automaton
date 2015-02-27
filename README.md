@@ -9,4 +9,4 @@ You can:
 * Change pixel size
 * Add a blocker to interrupt the pattern, and toggle blocker visibility
 * Choose from rule 90, 30 and 106 (my fave)
-* Fill the wole screen with random inital conditions
+* Fill the whole screen with random inital conditions
