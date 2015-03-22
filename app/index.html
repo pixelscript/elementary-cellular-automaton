@@ -9,7 +9,7 @@
     <link href='css/main.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <button type="button" class="butt show" style="display:none;opacity:0.7;">show</button>
+    <button type="button" class="butt show" style="display:none;">show controls</button>
     <div class="controls">
         <h1 class="title">Elementary Cellular Automaton</h1>
         <h2 class="title">Click or drag on Canvas</h2>
@@ -27,9 +27,9 @@
         <label for="r90">r90</label>
         <input type="radio" id="r90" name="type"  value="r90"/>
         <label for="r30">r30</label>
-        <input type="radio" id="r30" name="type" checked="true" value="r30"/>
+        <input type="radio" id="r30" name="type" value="r30"/>
         <label for="r106">r106</label>
-        <input type="radio" id="r106" name="type" value="r106"/>
+        <input type="radio" id="r106" name="type" checked="true" value="r106"/>
         <br/>
         <label for="overwrite">overwrite</label>
         <input type="checkbox" id="overwrite" name="overwrite" checked="true" value="overwrite"/>
@@ -53,6 +53,9 @@
         to;
 
         function getPages(e){
+            if(!e){
+                return;
+            }
             if(e.pageX === undefined) {
                 try{
                     e.pageX = e.originalEvent.touches[0].pageX;
@@ -68,6 +71,7 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(function(){
                     cell.setSize();
+                    fill();
                 },500);
             }
         }(to));
@@ -113,7 +117,7 @@
             e.preventDefault();
         });
 
-        $('.fill').on('mousedown touchstart',function(e) {
+        function fill(e) {
             getPages(e);
             var pixelSize = $('input:radio[name=pixelSize]:checked').val();
             var type = $('input:radio[name=type]:checked').val();
@@ -122,9 +126,14 @@
             cell.pixelSize = parseInt(pixelSize);
             cell.overwrite = $('#overwrite').is(':checked');
             cell.generateAutomina(0,right,0,type);
-            e.stopPropagation();
-            e.preventDefault();
-        });
+            if(e){
+                e.stopPropagation();
+                e.preventDefault();
+            }
+            
+        }
+
+        $('.fill').on('mousedown touchstart',fill);
 
         $('.ten').on('mousedown touchstart',function(e) {
             cell.pixelSize = 10;
@@ -142,13 +151,17 @@
             e.preventDefault();
         });
 
-        $('.hide').on('mousedown touchstart',function(e) {
+        function hide(e) {
             $('.controls').hide();
             $('.show').show();
             $('.github').hide();
-            e.stopPropagation();
-            e.preventDefault();
-        });
+            if(e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }
+
+        $('.hide').on('mousedown touchstart',hide);
 
         $('.show').on('mousedown touchstart',function(e) {
             $('.controls').show();
@@ -162,6 +175,9 @@
             cell.toggleBlocks($('#toggleBlocker').is(':checked'));
             e.stopPropagation();
         });
+
+        hide();
+        fill();
     });
 </script>
 <a class="github" href="https://github.com/pixelscript/elementary-cellular-automaton.git"><img style="position: absolute; top: 0; right: 0; border: 0; width:100px" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>

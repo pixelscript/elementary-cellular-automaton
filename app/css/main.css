@@ -46,13 +46,14 @@ h2.title{
 	padding:10px;
 	margin:10px;
 	float:left;
-	background-color:rgba(255,255,255,0.8);
+	background-color:rgb(255,255,255);
+	border:1px solid #ccc;
 }
 
 .show{
 	z-index:2;
 	position:relative;
-	margin:5px;
+	margin:10px;
 }
 
 .shadow {

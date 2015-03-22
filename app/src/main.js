@@ -43,7 +43,7 @@ $(function(){
 	Cellula.prototype.redraw = function() {
 		this.clear();
 		var pixelSize = this.pixelSize;
-		this.generateAutomina(this.getDivision(2),this.getDivision(2),0,'r30');
+		// this.generateAutomina(this.getDivision(2),this.getDivision(2),0,'r30');
 	}
 
 	Cellula.prototype.getDivision = function(d){
